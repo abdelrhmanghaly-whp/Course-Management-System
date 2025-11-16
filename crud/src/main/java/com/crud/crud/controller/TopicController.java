@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.crud.crud.model.Topic;
 import com.crud.crud.service.TopicService;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+
 @RestController
 public class TopicController {
 
@@ -19,28 +22,33 @@ public class TopicController {
     private TopicService topicService;
 
     @GetMapping("/topics")
-    public List<Topic> getAllTopics() {
-        return topicService.getAllTopics();
+    public ResponseEntity<List<Topic>> getAllTopics() {
+        return ResponseEntity.ok(topicService.getAllTopics());
     }
 
     @GetMapping("/topics/{id}")
-    public Topic getTopic(@PathVariable String id) {
-        return topicService.getTopic(id);
+    public ResponseEntity<Topic> getTopic(@PathVariable String id) {
+        Topic topic = topicService.getTopic(id);
+        return ResponseEntity.ok(topic);
     }
 
     @PostMapping("/topics")             
-    public void addTopic(@Valid @RequestBody Topic topic) {
+    public ResponseEntity<Topic>addTopic(@Valid @RequestBody Topic topic) {
+        // to do -> add validation to the topic it may be existed
         topicService.addTopic(topic);
+        return ResponseEntity.status(HttpStatus.CREATED).body(topic);
     }
 
     @PutMapping("/topics/{id}")
-    public void updateTopic(@Valid @RequestBody Topic topic, @PathVariable String id) {
+    public ResponseEntity<Topic>updateTopic(@Valid @RequestBody Topic topic, @PathVariable String id) {
         topicService.updateTopic(topic, id);
+        return ResponseEntity.ok(topic);
     }
 
     @DeleteMapping("/topics/{id}")
-    public void deleteTopic(@PathVariable String id) {
+    public ResponseEntity<Void>deleteTopic(@PathVariable String id) {
         topicService.deleteTopic(id);
+        return ResponseEntity.noContent().build();
     }
 }
 

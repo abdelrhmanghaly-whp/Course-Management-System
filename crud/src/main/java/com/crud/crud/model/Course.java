@@ -4,13 +4,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+// import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Course {
 
     @Id
-    @NotNull(message = "Id is required")
+    @NotBlank(message = "Id is required")
     private String id;
     @NotBlank(message = "Name is required")
     private String name;
