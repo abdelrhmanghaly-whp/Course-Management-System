@@ -1,11 +1,13 @@
 package com.crud.crud.service;
 
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.ArrayList;
+// import java.util.List;
+// import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.crud.crud.model.Topic;
 import com.crud.crud.repository.TopicRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class TopicService {
@@ -13,10 +15,8 @@ public class TopicService {
     @Autowired
     private TopicRepository topicRepository;
     
-    public List<Topic> getAllTopics() {
-        List<Topic> topics = new ArrayList<>();
-        topicRepository.findAll().forEach(topics::add);
-        return topics;
+    public Page<Topic> getAllTopics(Pageable pageable) {
+        return topicRepository.findAll(pageable);
     }
     
     public Topic getTopic(String id){

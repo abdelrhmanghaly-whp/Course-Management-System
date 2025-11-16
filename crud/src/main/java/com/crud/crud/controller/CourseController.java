@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import java.util.List;
+// import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.crud.crud.model.Course;
 import com.crud.crud.model.Topic;
@@ -16,6 +16,11 @@ import com.crud.crud.service.TopicService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 public class CourseController {
@@ -27,13 +32,19 @@ public class CourseController {
     private TopicService topicService;
 
     @GetMapping("/topics/{topicId}/courses")
-    public ResponseEntity<List<Course>> getAllCourses(@PathVariable String topicId) {
-        return ResponseEntity.ok(courseService.getAllCourses(topicId));
-    }
+public ResponseEntity<Page<Course>> getAllCourses(
+    @PathVariable String topicId,
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "10") int size
+) {
+    Pageable pageable = PageRequest.of(page, size);
+    return ResponseEntity.ok(courseService.getAllCourses(topicId, pageable));
+}
+    
 
     @GetMapping("/topics/{topicId}/courses/{courseId}")
-    public Course getCourse(@PathVariable String courseId) {
-        return courseService.getCourse(courseId);
+    public ResponseEntity<Course> getCourse(@PathVariable String courseId) {
+        return ResponseEntity.ok(courseService.getCourse(courseId));
     }
 
     @PostMapping("/topics/{topicId}/courses")

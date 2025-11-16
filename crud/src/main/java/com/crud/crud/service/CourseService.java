@@ -6,17 +6,16 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.crud.crud.model.Course;
 import com.crud.crud.repository.CourseRepository;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 @Service
 public class CourseService {
 
     @Autowired
     private CourseRepository courseRepository;
     
-    public List<Course> getAllCourses(String topicId) {
-        List<Course> courses = new ArrayList<>();
-        courseRepository.findByTopic_Id(topicId).forEach(courses::add);
-        return courses;
+    public Page<Course> getAllCourses(String topicId, Pageable pageable) {
+        return courseRepository.findByTopic_Id(topicId, pageable);
     }
     
     public Course getCourse(String id){
