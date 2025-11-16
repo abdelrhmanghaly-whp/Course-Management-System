@@ -11,7 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.crud.crud.model.Topic;
 import com.crud.crud.service.TopicService;
-
+import jakarta.validation.Valid;
 @RestController
 public class TopicController {
 
@@ -28,13 +28,13 @@ public class TopicController {
         return topicService.getTopic(id);
     }
 
-    @PostMapping("/topics")
-    public void addTopic(@RequestBody Topic topic) {
+    @PostMapping("/topics")             
+    public void addTopic(@Valid @RequestBody Topic topic) {
         topicService.addTopic(topic);
     }
 
     @PutMapping("/topics/{id}")
-    public void updateTopic(@RequestBody Topic topic, @PathVariable String id) {
+    public void updateTopic(@Valid @RequestBody Topic topic, @PathVariable String id) {
         topicService.updateTopic(topic, id);
     }
 

@@ -2,13 +2,18 @@ package com.crud.crud.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Topic {
 
     @Id
+    @NotBlank(message="Id is required")
     private String id;
+    @NotBlank(message="Name is required")
     private String name;
+    @NotBlank(message="Description is required")
     private String description;
 
     public Topic(){

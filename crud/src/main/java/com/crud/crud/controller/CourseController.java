@@ -13,6 +13,7 @@ import com.crud.crud.model.Course;
 import com.crud.crud.model.Topic;
 import com.crud.crud.service.CourseService;
 import com.crud.crud.service.TopicService;
+import jakarta.validation.Valid;
 
 @RestController
 public class CourseController {
@@ -34,14 +35,14 @@ public class CourseController {
     }
 
     @PostMapping("/topics/{topicId}/courses")
-    public void addCourse(@RequestBody Course course, @PathVariable String topicId) {
+    public void addCourse(@Valid @RequestBody Course course, @PathVariable String topicId) {
         Topic topic = topicService.getTopic(topicId);
         course.setTopic(topic);
         courseService.addCourse(course);
     }
 
     @PutMapping("/topics/{topicId}/courses/{id}")
-    public void updateCourse(@RequestBody Course course, @PathVariable String topicId, @PathVariable String id) {
+    public void updateCourse(@Valid @RequestBody Course course, @PathVariable String topicId, @PathVariable String id) {
         Topic topic = topicService.getTopic(topicId);
         course.setTopic(topic);
         courseService.updateCourse(course);
