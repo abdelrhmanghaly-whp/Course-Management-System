@@ -1,8 +1,8 @@
 package com.crud.crud.service;
 
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.ArrayList;
+// import java.util.List;
+// import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.crud.crud.model.Course;
 import com.crud.crud.repository.CourseRepository;
@@ -16,6 +16,16 @@ public class CourseService {
     
     public Page<Course> getAllCourses(String topicId, Pageable pageable) {
         return courseRepository.findByTopic_Id(topicId, pageable);
+    }
+
+    public Page<Course> searchCoursesByName(String keyword, Pageable pageable){
+        return courseRepository.findByNameContainingIgnoreCase(keyword, pageable);
+    }
+
+    public Page<Course> searchCourses(String keyword, Pageable pageable){
+        return courseRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(keyword, keyword, pageable);
+        // name LIKE %keyword% OR description LIKE %keyword%
+        // search mrteen in both fields fa pass it twice
     }
     
     public Course getCourse(String id){
@@ -34,5 +44,7 @@ public class CourseService {
     public void deleteCourse(String id){
         courseRepository.deleteById(id);
     }
+
+ 
 }
 

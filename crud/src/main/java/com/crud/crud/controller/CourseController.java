@@ -32,14 +32,14 @@ public class CourseController {
     private TopicService topicService;
 
     @GetMapping("/topics/{topicId}/courses")
-public ResponseEntity<Page<Course>> getAllCourses(
+    public ResponseEntity<Page<Course>> getAllCourses(
     @PathVariable String topicId,
     @RequestParam(defaultValue = "0") int page,
     @RequestParam(defaultValue = "10") int size
-) {
+    ) {
     Pageable pageable = PageRequest.of(page, size);
     return ResponseEntity.ok(courseService.getAllCourses(topicId, pageable));
-}
+    }
     
 
     @GetMapping("/topics/{topicId}/courses/{courseId}")
@@ -68,5 +68,26 @@ public ResponseEntity<Page<Course>> getAllCourses(
         courseService.deleteCourse(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/courses/search")
+    public ResponseEntity<Page<Course>> searchCourses(
+        @RequestParam String keyword,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size
+    ){
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(courseService.searchCoursesByName(keyword, pageable));
+    }
+
+    @GetMapping("/courses/search/description")
+    public ResponseEntity<Page<Course>> searchCoursesByDescription(
+        @RequestParam String keyword,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size
+    ){
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(courseService.searchCourses(keyword, pageable));
+    }
+    
 }
 
