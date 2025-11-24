@@ -14,13 +14,15 @@ This project demonstrates a complete backend REST API with authentication, valid
 - **Search & Filter** - Search courses by name or description
 - **Exception Handling** - Global error handling with consistent responses
 - **HTTP Status Codes** - Proper REST status codes (201, 204, 404, 400, 401)
+- **Unit Tests** - Comprehensive tests with JUnit and Mockito
 
 ## Tech Stack
 
 - Spring Boot 3.5.7
 - Spring Security + JWT
 - Spring Data JPA
-- H2 Database (in-memory)
+- MySQL Database
+- JUnit 5 + Mockito
 - Java 21
 - Maven
 
@@ -30,6 +32,22 @@ This project demonstrates a complete backend REST API with authentication, valid
 
 - Java 21 or higher
 - Maven
+- MySQL 9.5+ (or 8.4 LTS)
+
+### Database Setup
+
+1. Install MySQL
+2. Create a database:
+```sql
+CREATE DATABASE course_management_db;
+```
+
+3. Update `application.properties` with your MySQL credentials:
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/course_management_db
+spring.datasource.username=root
+spring.datasource.password=your_password
+```
 
 ### Run the Application
 
@@ -38,6 +56,12 @@ This project demonstrates a complete backend REST API with authentication, valid
 ```
 
 The API will be available at `http://localhost:8080`
+
+### Run Tests
+
+```bash
+mvn test
+```
 
 ## API Documentation
 
@@ -150,25 +174,47 @@ Authorization: Bearer {your-token}
 
 ## Database
 
-The application uses H2 in-memory database. Access the H2 console at:
+The application uses MySQL for data persistence. Tables are automatically created by Hibernate based on the entity classes.
 
+### Database Schema
+
+- **users** - User accounts with hashed passwords
+- **topic** - Educational topics (e.g., Java, Python)
+- **course** - Courses belonging to topics
+
+### Access Database
+
+Use MySQL Workbench or command line:
+```bash
+mysql -u root -p
+USE course_management_db;
+SHOW TABLES;
 ```
-URL: http://localhost:8080/h2-console
-JDBC URL: jdbc:h2:mem:testdb
-Username: (leave blank)
-Password: (leave blank)
-```
+
+## Testing
+
+The project includes unit tests for services:
+
+- **TopicServiceTest** - Tests for topic CRUD operations
+- **AuthServiceTest** - Tests for registration and login
+
+Tests use Mockito to mock dependencies, ensuring fast and isolated testing.
 
 ## Project Structure
 
 ```
-src/main/java/com/crud/crud/
-├── auth/              # JWT authentication & security
-├── controller/        # REST controllers
-├── service/           # Business logic
-├── repository/        # Data access layer
-├── model/            # JPA entities
-└── exception/        # Global exception handling
+src/
+├── main/java/com/crud/crud/
+│   ├── auth/              # JWT authentication & security
+│   ├── controller/        # REST controllers
+│   ├── service/           # Business logic
+│   ├── repository/        # Data access layer
+│   ├── model/            # JPA entities
+│   └── exception/        # Global exception handling
+│
+└── test/java/com/crud/crud/
+    ├── service/           # Service unit tests
+    └── auth/              # Auth service tests
 ```
 
 ## Security
@@ -180,9 +226,9 @@ src/main/java/com/crud/crud/
 
 ## Future Enhancements
 
+- Integration tests with @SpringBootTest
 - Refresh token mechanism
 - User roles and permissions
-- Email verification
-- Password reset functionality
-- API documentation with Swagger
+- Logging with SLF4J
+- API documentation with Swagger/OpenAPI
 
