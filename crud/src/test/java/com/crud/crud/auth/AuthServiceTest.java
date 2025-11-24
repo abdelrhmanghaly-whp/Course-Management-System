@@ -81,7 +81,7 @@ public class AuthServiceTest {
     
     @Test
     void login_WhenUserNotFound_ShouldThrowException(){
-        when(userRepository.findByUsername("gholyo")).thenReturn(Optional.of(testUser));
+        when(userRepository.findByUsername("gholyo")).thenReturn(Optional.empty());
         RuntimeException ex=assertThrows(RuntimeException.class, () -> authService.login(testRequest));
 
         assertTrue(ex.getMessage().contains("Invalid username or password"));
