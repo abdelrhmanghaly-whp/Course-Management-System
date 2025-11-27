@@ -20,6 +20,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.crud.crud.model.Category;
+import com.crud.crud.service.CategoryService;
 
 
 @RestController
@@ -30,6 +32,9 @@ public class CourseController {
     
     @Autowired
     private TopicService topicService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @GetMapping("/topics/{topicId}/courses")
     public ResponseEntity<Page<Course>> getAllCourses(
@@ -87,6 +92,31 @@ public class CourseController {
     ){
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(courseService.searchCourses(keyword, pageable));
+    }
+
+    @PostMapping("/courses/{courseId}/categories/{categoryId}")
+    public ResponseEntity<Course> addCategoryToCourse(
+        @PathVariable String courseId,
+        @PathVariable String categoryId
+    ){
+        Course course = courseService.getCourse(courseId);
+        Category category = categoryService.getCategory(categoryId);
+        course.addCategory(category);
+        courseService.updateCourse(course);
+        return ResponseEntity.ok(course);
+    }
+
+    @DeleteMapping("/courses/{courseId}/categories/{categoryId}")
+    public ResponseEntity<Course> removeCategoryFromCourse(
+        @PathVariable String courseId,
+        @PathVariable String categoryId
+    ){
+        Course course = courseService.getCourse(courseId);
+        Category category = categoryService.getCategory(categoryId);
+
+        course.removeCategory(category);
+        courseService.updateCourse(course);
+        return ResponseEntity.ok(course);
     }
     
 }

@@ -4,6 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
+import java.util.HashSet;
+import java.util.Set;
 // import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -19,6 +25,11 @@ public class Course {
     
     @ManyToOne
     private Topic topic;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "course_category", joinColumns = @JoinColumn(name = "course_id"), inverseJoinColumns =@JoinColumn(name = "category_id"))
+
+    private Set<Category> categories = new HashSet<>();
 
     public Course(){
 
@@ -54,6 +65,17 @@ public class Course {
     }
     public void setTopic(Topic topic) {
         this.topic = topic;
+    }
+    public Set<Category> getCategories(){
+        return categories;
+    }
+    public void addCategory(Category category){
+        this.categories.add(category);
+        category.getCourses().add(this);
+    }
+    public void removeCategory(Category category){
+        this.categories.remove(category);
+        category.getCourses().remove(this);
     }
 }
 
