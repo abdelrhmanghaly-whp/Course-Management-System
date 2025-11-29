@@ -6,6 +6,9 @@ import com.crud.crud.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.crud.crud.service.EmailService;
+
+
 
 
 
@@ -19,6 +22,8 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtService jwtService;
+    @Autowired
+    private EmailService emailService;
 
     // Register
     public AuthResponse register(AuthRequest req){
@@ -32,6 +37,10 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(req.getPassword()));
         user.setEmail(req.getEmail());
         userRepository.save(user);
+
+        if(req.getEmail()!=null && !req.getEmail().isEmpty()){
+            emailService.sendWelcomeEmail(req.getEmail(),req.getUsername());
+        }
 
         String token = jwtService.generateToken(req.getUsername());
         return new AuthResponse(token, user.getUsername());
